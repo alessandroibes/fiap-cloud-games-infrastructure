@@ -26,4 +26,4 @@ Dockerfile multi-stage e .dockerignore em G2–G5, antes de G6. /k8s no G7. G2 v
 - Contratos locais, namespace aprovado, JSON camelCase, GUID, UTC, decimal BRL e identidade MassTransit testados.
 - Approved concede/confirma uma vez logicamente; Rejected não concede/confirma; eventos conflitantes não revertem estado terminal.
 - JWT, papéis, autorização por proprietário e logs sem segredos.
-- Não marcar requisito validado por documentação apenas. Evidências em [G0](../quality/g0-validation.md); G1–G9 ainda planejados.
+- Não marcar requisito validado por documentação apenas. Evidências em [G0](../quality/g0-validation.md) e [G1](../quality/g1-validation.md); G2–G9 ainda planejados.

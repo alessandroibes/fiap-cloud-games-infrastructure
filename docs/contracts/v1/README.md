@@ -2,7 +2,7 @@
 
 **Status:** Aceito (ADR-P2-004). A FIAP exige os três eventos; os campos adicionais são decisões do projeto.
 
-Esta pasta é a especificação canônica versionada. Conferência documental em 30/10/2026: campos e exemplos JSON alinhados ao ADR-P2-004. Testes C#/MassTransit ainda serão implementados em G1; não inferir interoperabilidade executada desta revisão.
+Esta pasta é a especificação canônica versionada. Campos e exemplos JSON alinhados ao ADR-P2-004. O G1 testa fixtures C# em assemblies independentes, JSON e transmissão MassTransit pelo RabbitMQ; veja a [matriz de integração](integration-matrix.md). Repetir a compatibilidade com os tipos reais dos serviços em G2–G5.
 
 - `user-created-v1.md`
 - `order-placed-v1.md`

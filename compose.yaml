@@ -1,0 +1,49 @@
+name: fiap-cloud-games
+
+services:
+  postgres:
+    image: postgres:17-bookworm@sha256:839fbb5a4942a7758dd93e18b42ea5649807491a0545b5eeeb8f0b8bb11857a5
+    environment:
+      POSTGRES_USER: fcg_admin
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?Execute scripts/Initialize-Local.ps1}
+      USERS_DB_PASSWORD: ${USERS_DB_PASSWORD:?Senha Users ausente}
+      CATALOG_DB_PASSWORD: ${CATALOG_DB_PASSWORD:?Senha Catalog ausente}
+      PAYMENTS_DB_PASSWORD: ${PAYMENTS_DB_PASSWORD:?Senha Payments ausente}
+      NOTIFICATIONS_DB_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD:?Senha Notifications ausente}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init-services.sh:/docker-entrypoint-initdb.d/10-services.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -h 127.0.0.1 -U fcg_admin -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:4.2.9-management@sha256:d1fb8b38bd0805935907a22b2b7483fba38c9a8dd7e8a74bfba4a6e7a9e91707
+    hostname: fcg-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: fcg_local
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?Execute scripts/Initialize-Local.ps1}
+      RABBITMQ_DEFAULT_VHOST: fcg
+    ports:
+      - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672"
+      - "127.0.0.1:${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: [CMD, rabbitmq-diagnostics, -q, check_running]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 20s
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  rabbitmq-data:

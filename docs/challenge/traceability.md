@@ -8,7 +8,7 @@
 - `Validado`: critério verificado com evidência.
 - `Bloqueado`: impedimento concreto documentado.
 
-> Atualização de 03/11/2026: G0–G7 concluídos; G8–G9 pendentes. Referências SPEC/CONTRACT são identificadores lógicos, com documentos em docs/specifications/ e docs/contracts/. Evidências G2–G5 ficam em docs/quality/gN-validation.md de cada serviço; [G6](../quality/g6-validation.md) e [G7](../quality/g7-validation.md) consolidam a integração. Aceitação de ADR não equivale a requisito validado.
+> Atualização de 03/11/2026: G0–G8 concluídos; G9 pendente. Referências SPEC/CONTRACT são identificadores lógicos, com documentos em docs/specifications/ e docs/contracts/. Evidências G2–G5 ficam em docs/quality/gN-validation.md de cada serviço; [G6](../quality/g6-validation.md) e [G7](../quality/g7-validation.md) consolidam a integração. Aceitação de ADR não equivale a requisito validado.
 
 | ID | Responsável | Artefato/contrato previsto | Evidência prevista | Status |
 |---|---|---|---|---|
@@ -70,3 +70,5 @@ Ao concluir uma tarefa, alterar somente as linhas cujas evidências existam. Nã
 | ADR-P2-007 — Segurança/containers/Kubernetes | TECH-201, DOCK-201 a DOCK-203, K8S-201 a K8S-206 | Aceito |
 
 > **Atenção:** `Aceito` é status de decisão arquitetural, não de requisito implementado.
+
+Revisão transversal G8: [171 testes e resiliência no cluster](../quality/g8-validation.md). Evidências funcionais mantidas; os entregáveis acadêmicos restantes continuam Planejado até receber dados/URLs e produzir a entrega.

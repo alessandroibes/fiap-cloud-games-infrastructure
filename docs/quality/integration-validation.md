@@ -1,6 +1,6 @@
 # Estratégia de testes e validação — Fase 2
 
-**Estado:** Proposta. Diferenciar evidência de teste executado de critério planejado.
+**Estado:** Executado até G8, com resultados e limites em [G6](g6-validation.md), [G7](g7-validation.md) e [G8](g8-validation.md). Cenários de perda de nó, backup e carga prolongada não foram validados.
 
 ## Camadas
 - **Unitários:** regras de domínio, autorização, transições de pedido, política de pagamento, deduplicação.
@@ -23,3 +23,5 @@
 
 ## Gates
 `dotnet restore`, `dotnet build`, `dotnet test` por serviço; `docker compose config`, `docker compose up --build` e testes integrados; `kubectl apply`/`kubectl get` em cluster local. Documentar comandos, ambiente e resultados reais. Não marcar `Validado` sem execução.
+
+G8 reexecutou 171 testes dos quatro serviços e acrescentou roteiro integrado de indisponibilidade do broker, concorrência e replay no Kubernetes. A interrupção dos produtores preservou Outbox e pedido Pending; a recuperação produziu efeitos únicos. Recuperação de filas de erro e limites estão no [procedimento operacional](../implementation/recovery-runbook.md).

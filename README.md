@@ -4,7 +4,7 @@ Contratos V1, documentação transversal e orquestração de PostgreSQL, RabbitM
 
 ## Estado
 
-G0–G7 concluídos nos respectivos repositórios. Os quatro microsserviços possuem implementação, testes, Dockerfiles e manifestos /k8s. Compose e Kubernetes Docker Desktop executam os fluxos de aprovação/rejeição com persistência validada. Próximo gate: G8, revisão transversal de resiliência.
+G0–G8 concluídos nos respectivos repositórios. Os quatro microsserviços possuem implementação, testes, Dockerfiles e manifestos /k8s. Compose e Kubernetes Docker Desktop executam os fluxos de aprovação/rejeição com persistência validada. G8 reexecutou 171 testes e validou recuperação de Outbox, concorrência e replay no cluster. Próximo gate: G9, preparação da entrega acadêmica.
 
 ## Documentação
 
@@ -21,6 +21,8 @@ G0–G7 concluídos nos respectivos repositórios. Os quatro microsserviços pos
 - [Estado da validação G6](docs/quality/g6-validation.md).
 - [Implantação Kubernetes Docker Desktop](docs/implementation/kubernetes-desktop.md).
 - [Estado da validação G7](docs/quality/g7-validation.md).
+- [Evidências de resiliência G8](docs/quality/g8-validation.md).
+- [Recuperação e reprodução dos testes de falha](docs/implementation/recovery-runbook.md).
 
 ## Execução e configuração
 

@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-data
+  namespace: fcg-phase2
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests: {storage: 1Gi}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+  namespace: fcg-phase2
+data:
+  RABBITMQ_DEFAULT_USER: fcg_local
+  RABBITMQ_DEFAULT_VHOST: fcg
+  RABBITMQ_NODENAME: rabbit@rabbitmq
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  namespace: fcg-phase2
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector:
+    matchLabels: {app: rabbitmq}
+  template:
+    metadata:
+      labels: {app: rabbitmq}
+    spec:
+      hostname: rabbitmq
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:4.2.9-management@sha256:d1fb8b38bd0805935907a22b2b7483fba38c9a8dd7e8a74bfba4a6e7a9e91707
+          ports:
+            - {name: amqp, containerPort: 5672}
+            - {name: management, containerPort: 15672}
+          envFrom:
+            - configMapRef: {name: rabbitmq-config}
+            - secretRef: {name: rabbitmq-secret}
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: "1", memory: 768Mi}
+          volumeMounts:
+            - {name: data, mountPath: /var/lib/rabbitmq}
+          startupProbe:
+            exec: {command: [gosu, rabbitmq, rabbitmq-diagnostics, -q, check_running]}
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            exec: {command: [gosu, rabbitmq, rabbitmq-diagnostics, -q, check_running]}
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec: {command: [gosu, rabbitmq, rabbitmq-diagnostics, -q, ping]}
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 6
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: rabbitmq-data}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: fcg-phase2
+spec:
+  selector: {app: rabbitmq}
+  ports:
+    - {name: amqp, port: 5672, targetPort: amqp}
+    - {name: management, port: 15672, targetPort: management}

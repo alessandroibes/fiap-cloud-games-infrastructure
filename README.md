@@ -4,7 +4,7 @@ Contratos V1, documentação transversal e orquestração de PostgreSQL, RabbitM
 
 ## Estado
 
-G0–G6 concluídos nos respectivos repositórios. Os quatro microsserviços possuem implementação, testes e Dockerfiles. Este Compose integra as APIs, PostgreSQL e RabbitMQ, com fluxo de aprovação/rejeição e persistência validados. Kubernetes pertence ao G7.
+G0–G7 concluídos nos respectivos repositórios. Os quatro microsserviços possuem implementação, testes, Dockerfiles e manifestos /k8s. Compose e Kubernetes Docker Desktop executam os fluxos de aprovação/rejeição com persistência validada. Próximo gate: G8, revisão transversal de resiliência.
 
 ## Documentação
 
@@ -19,6 +19,8 @@ G0–G6 concluídos nos respectivos repositórios. Os quatro microsserviços pos
 - [Evidências G1](docs/quality/g1-validation.md).
 - [Operação do Compose completo](docs/implementation/compose-complete.md).
 - [Estado da validação G6](docs/quality/g6-validation.md).
+- [Implantação Kubernetes Docker Desktop](docs/implementation/kubernetes-desktop.md).
+- [Estado da validação G7](docs/quality/g7-validation.md).
 
 ## Execução e configuração
 

@@ -13,7 +13,7 @@ Execução incremental autorizada; commits separados por repositório; sem push/
 | G6 | Compose completo | G2–G5; cadastro e compras Approved/Rejected ponta a ponta, persistência em volumes |
 | G7 | /k8s por serviço | G6; Docker Desktop Kubernetes, Deployments/Services/ConfigMaps/Secrets/PVCs/probes e fluxos |
 | G8 | Resiliência e revisão | Broker indisponível, reinício, falha após commit, concorrência, inválidos e fila de erro |
-| G9 | Entrega acadêmica | READMEs, checklist, roteiro <=20 min e relatório com dados/URLs reais solicitados ao responsável |
+| G9 | Entrega acadêmica | READMEs, checklist, roteiro <=20 min; responsável cria relatório com dados/URLs reais, grava vídeo e realiza submissão |
 
 Dockerfile multi-stage e .dockerignore em G2–G5, antes de G6. /k8s no G7. G2 verifica publicação; boas-vindas ponta a ponta dependem de G5/G6. G1 valida contratos isolados; repetir nos tipos efetivos dos serviços.
 
@@ -30,4 +30,4 @@ Dockerfile multi-stage e .dockerignore em G2–G5, antes de G6. /k8s no G7. G2 v
 
 ## Progresso consolidado
 
-G2 Users (`b3ca6dc`), G3 Catalog (`bc80da6`), G4 Payments (`b841965`) e G5 Notifications (`43f7cd1`) concluídos em commits independentes, conforme registros de validação de cada repositório. Suas suítes completas não foram reexecutadas neste gate. G6 concluiu orquestração central e teste de cadastro, boas-vindas, Approved, Rejected, nova tentativa, confirmação e persistência após recriação de containers, além da regressão G1 com mensageria isolada. G7 concluiu a implantação Kubernetes Docker Desktop com Jobs explícitos, probes, Secrets, PVCs e fluxo integrado validado após substituição dos pods. G8 concluiu regressão de 171 testes, correção compatível de fingerprint no Catalog e recuperação integrada de broker/Outbox com concorrência e replay. Próximo gate: G9, entrega acadêmica com dados e links fornecidos pelo responsável.
+G2 Users (`b3ca6dc`), G3 Catalog (`bc80da6`), G4 Payments (`b841965`) e G5 Notifications (`43f7cd1`) concluídos em commits independentes, conforme registros de validação de cada repositório. G6 concluiu orquestração central e teste de cadastro, boas-vindas, Approved, Rejected, nova tentativa, confirmação e persistência após recriação de containers, além da regressão G1 com mensageria isolada. G7 concluiu a implantação Kubernetes Docker Desktop com Jobs explícitos, probes, Secrets, PVCs e fluxo integrado validado após substituição dos pods. G8 concluiu regressão de 171 testes, correção compatível de fingerprint no Catalog e recuperação integrada de broker/Outbox com concorrência e replay. G9 está em preparação documental; relatório, vídeo e submissão ficam sob responsabilidade do usuário. Estado detalhado em [G9](../quality/g9-preparation.md).

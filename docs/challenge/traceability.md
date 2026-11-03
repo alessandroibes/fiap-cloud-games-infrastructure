@@ -8,7 +8,7 @@
 - `Validado`: critério verificado com evidência.
 - `Bloqueado`: impedimento concreto documentado.
 
-> Atualização de 03/11/2026: G0–G8 concluídos; G9 pendente. Referências SPEC/CONTRACT são identificadores lógicos, com documentos em docs/specifications/ e docs/contracts/. Evidências G2–G5 ficam em docs/quality/gN-validation.md de cada serviço; [G6](../quality/g6-validation.md) e [G7](../quality/g7-validation.md) consolidam a integração. Aceitação de ADR não equivale a requisito validado.
+> Atualização de 03/11/2026: G0–G8 concluídos; G9 com preparação documental, pendente de vídeo/dados/submissão. Referências SPEC/CONTRACT são identificadores lógicos, com documentos em docs/specifications/ e docs/contracts/. Evidências G2–G5 ficam em docs/quality/gN-validation.md de cada serviço; [G6](../quality/g6-validation.md) e [G7](../quality/g7-validation.md) consolidam a integração. Aceitação de ADR não equivale a requisito validado.
 
 | ID | Responsável | Artefato/contrato previsto | Evidência prevista | Status |
 |---|---|---|---|---|
@@ -28,15 +28,15 @@
 | DOCK-201 | Todos | Dockerfile | Quatro Dockerfiles funcionais | Validado |
 | DOCK-202 | Todos | Dockerfile | Multi-stage verificado | Validado |
 | DOCK-203 | Orquestração | compose.yaml | Compose V2, Start-Local e fluxos G6 | Validado |
-| K8S-201 | Todos | `/k8s` por repositório | Estruturas presentes | Planejado |
-| K8S-202 | Todos | Deployment | Pods gerenciados por Deployment | Planejado |
-| K8S-203 | Todos | ConfigMap | Configurações não sensíveis | Planejado |
-| K8S-204 | Todos | Secret | Referências sem credenciais reais no Git | Planejado |
-| K8S-205 | Todos | Service / configuração | Comunicação por nomes DNS internos | Planejado |
-| K8S-206 | Orquestração + todos | Guia de deploy | Cluster local e pods saudáveis | Planejado |
+| K8S-201 | Todos | `/k8s` por repositório | Estruturas presentes | Validado |
+| K8S-202 | Todos | Deployment | Pods gerenciados por Deployment | Validado |
+| K8S-203 | Todos | ConfigMap | Configurações não sensíveis | Validado |
+| K8S-204 | Todos | Secret | Referências sem credenciais reais no Git | Validado |
+| K8S-205 | Todos | Service / configuração | Comunicação por nomes DNS internos | Validado |
+| K8S-206 | Orquestração + todos | Guia de deploy | Cluster local e pods saudáveis | Validado |
 | MSG-201 | Todos com mensageria | ADR-P2-003 | Biblioteca .NET integrada ao broker | Validado |
 | DEL-201 | Entrega | Roteiro de vídeo | Vídeo de até 20 min | Planejado |
-| DEL-202 | Entrega | README principal | URLs dos quatro serviços | Planejado |
+| DEL-202 | Entrega | README principal | URLs reais e remotos conferidos; acesso do avaliador pendente | Implementado |
 | DEL-203 | Todos | README por serviço | Finalidade e variáveis | Validado |
 | DEL-204 | Orquestração | README principal | Docker e Kubernetes reproduzíveis | Validado |
 | DEL-205 | Entrega | Relatório PDF/TXT | Dados e links solicitados | Planejado |

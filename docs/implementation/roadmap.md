@@ -26,4 +26,8 @@ Dockerfile multi-stage e .dockerignore em G2–G5, antes de G6. /k8s no G7. G2 v
 - Contratos locais, namespace aprovado, JSON camelCase, GUID, UTC, decimal BRL e identidade MassTransit testados.
 - Approved concede/confirma uma vez logicamente; Rejected não concede/confirma; eventos conflitantes não revertem estado terminal.
 - JWT, papéis, autorização por proprietário e logs sem segredos.
-- Não marcar requisito validado por documentação apenas. Evidências em [G0](../quality/g0-validation.md) e [G1](../quality/g1-validation.md); G2–G9 ainda planejados.
+- Não marcar requisito validado por documentação apenas. Evidências em [G0](../quality/g0-validation.md), [G1](../quality/g1-validation.md) e nos registros G2–G5 dos respectivos serviços. [G6](../quality/g6-validation.md) concluído; G7–G9 planejados.
+
+## Progresso consolidado
+
+G2 Users (`b3ca6dc`), G3 Catalog (`bc80da6`), G4 Payments (`b841965`) e G5 Notifications (`43f7cd1`) concluídos em commits independentes, conforme registros de validação de cada repositório. Suas suítes completas não foram reexecutadas neste gate. G6 concluiu orquestração central e teste de cadastro, boas-vindas, Approved, Rejected, nova tentativa, confirmação e persistência após recriação de containers, além da regressão G1 com mensageria isolada. Próximo gate: G7, Kubernetes Docker Desktop.

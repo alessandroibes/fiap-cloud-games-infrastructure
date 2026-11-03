@@ -4,7 +4,7 @@ Contratos V1, documentação transversal e orquestração de PostgreSQL, RabbitM
 
 ## Estado
 
-G0 concluído. G1 entrega PostgreSQL/RabbitMQ no Compose, isolamento dos quatro bancos e testes .NET de contratos e infraestrutura. Ainda não há microsserviços, Outbox/Inbox ou manifests Kubernetes; essas capacidades pertencem aos próximos gates.
+G0–G6 concluídos nos respectivos repositórios. Os quatro microsserviços possuem implementação, testes e Dockerfiles. Este Compose integra as APIs, PostgreSQL e RabbitMQ, com fluxo de aprovação/rejeição e persistência validados. Kubernetes pertence ao G7.
 
 ## Documentação
 
@@ -17,21 +17,23 @@ G0 concluído. G1 entrega PostgreSQL/RabbitMQ no Compose, isolamento dos quatro 
 - [Infraestrutura local e variáveis](docs/implementation/local-infrastructure.md).
 - [Matriz de integração V1](docs/contracts/v1/integration-matrix.md).
 - [Evidências G1](docs/quality/g1-validation.md).
+- [Operação do Compose completo](docs/implementation/compose-complete.md).
+- [Estado da validação G6](docs/quality/g6-validation.md).
 
 ## Execução e configuração
 
 Com Docker Desktop iniciado e SDK .NET 8 instalado, execute na raiz:
 
 ```powershell
-./scripts/Initialize-Local.ps1
-docker compose config --quiet
-docker compose up -d --wait --wait-timeout 180
-./scripts/Validate-G1.ps1
+./scripts/Start-Local.ps1
+./scripts/Validate-G6.ps1 -SkipStart
 ```
 
-O último comando executa testes e reinicia apenas os containers deste Compose para verificar persistência. PostgreSQL em localhost:55432, RabbitMQ em localhost:5672 e painel em localhost:15672. Credenciais aleatórias em .env ignorado; variáveis documentadas em .env.example. Nunca imprimir configuração expandida com segredos. Para parar sem apagar dados: `docker compose stop`.
+Mantenha os quatro clones de serviços ao lado deste clone, com seus nomes originais. Start-Local constrói imagens, inicia dependências, para APIs anteriores, executa migrations e bootstrap explicitamente e verifica readiness. Validate-G6 cria dados de demonstração, alterna o modo de pagamento e recria containers para verificar persistência. Execute sem outras compras em andamento. Veja efeitos, recuperação e comandos individuais no [guia](docs/implementation/compose-complete.md).
 
-Os projetos Producer.Contracts e Consumer.Contracts são fixtures independentes de teste, não bibliotecas compartilhadas pelos futuros serviços. Migrations de aplicações serão explícitas antes das APIs, a partir de G2. Não utilizar SQLite ou Kind.
+APIs em localhost:5081–5084, PostgreSQL em localhost:55432, RabbitMQ em localhost:5672 e painel em localhost:15672. Credenciais em .env ignorado; variáveis em .env.example. Nunca imprimir configuração expandida com segredos. Para parar sem apagar dados: `docker compose stop`. Depois da preparação explícita, `docker compose up --build` inicia a solução; não executa migrations no startup.
+
+Os projetos Producer.Contracts e Consumer.Contracts são fixtures independentes de teste, não bibliotecas compartilhadas pelos serviços. Os testes G1 continuam disponíveis por `scripts/Validate-G1.ps1`; esse script reinicia PostgreSQL/RabbitMQ e deve rodar em janela sem outras validações. Não utilizar SQLite ou Kind.
 
 ## Git e segurança
 

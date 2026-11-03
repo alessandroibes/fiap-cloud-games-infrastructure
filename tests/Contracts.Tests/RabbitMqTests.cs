@@ -12,11 +12,28 @@ using C = Consumer::FiapCloudGames.Contracts.V1;
 namespace FiapCloudGames.Infrastructure.Tests;
 
 [Trait("Category", "Infrastructure")]
-public class RabbitMqTests
+public class RabbitMqTests : IAsyncLifetime
 {
+    private const string TestVirtualHost = "fcg_g1_tests";
+    private static HttpClient Management()
+    {
+        var http = new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{LocalEnvironment.Get("RABBITMQ_MANAGEMENT_PORT")}/api/"), Timeout = TimeSpan.FromSeconds(15) };
+        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"fcg_local:{LocalEnvironment.Get("RABBITMQ_PASSWORD")}")));
+        return http;
+    }
+
+    public async Task InitializeAsync()
+    {
+        using var http = Management();
+        (await http.PutAsJsonAsync($"vhosts/{TestVirtualHost}", new { })).EnsureSuccessStatusCode();
+        (await http.PutAsJsonAsync($"permissions/{TestVirtualHost}/fcg_local", new { configure = ".*", write = ".*", read = ".*" })).EnsureSuccessStatusCode();
+    }
+
+    public Task DisposeAsync() => Task.CompletedTask;
+
     private static IBusControl Bus(Action<IRabbitMqBusFactoryConfigurator>? configure = null) => MassTransit.Bus.Factory.CreateUsingRabbitMq(cfg =>
     {
-        cfg.Host("127.0.0.1", ushort.Parse(LocalEnvironment.Get("RABBITMQ_PORT")), "fcg", h =>
+        cfg.Host("127.0.0.1", ushort.Parse(LocalEnvironment.Get("RABBITMQ_PORT")), TestVirtualHost, h =>
         {
             h.Username("fcg_local"); h.Password(LocalEnvironment.Get("RABBITMQ_PASSWORD"));
         });
@@ -85,15 +102,14 @@ public class RabbitMqTests
     [Trait("Phase", "Persistence")]
     public async Task Durable_message_survives_container_restart()
     {
-        using var http = new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{LocalEnvironment.Get("RABBITMQ_MANAGEMENT_PORT")}/api/"), Timeout = TimeSpan.FromSeconds(15) };
-        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"fcg_local:{LocalEnvironment.Get("RABBITMQ_PASSWORD")}")));
-        const string queue = "queues/fcg/g1-validation-persistence";
+        using var http = Management();
+        const string queue = $"queues/{TestVirtualHost}/g1-validation-persistence";
         if (!LocalEnvironment.VerifyPersistence)
         {
             (await http.PutAsJsonAsync(queue, new { durable = true, auto_delete = false, arguments = new { } })).EnsureSuccessStatusCode();
             // Limpa apenas a fila técnica deste teste antes de semear a próxima verificação.
             (await http.DeleteAsync(queue + "/contents")).EnsureSuccessStatusCode();
-            var response = await http.PostAsJsonAsync("exchanges/fcg/amq.default/publish", new
+            var response = await http.PostAsJsonAsync($"exchanges/{TestVirtualHost}/amq.default/publish", new
             {
                 properties = new { delivery_mode = 2 }, routing_key = "g1-validation-persistence",
                 payload = "g1-persistence-marker", payload_encoding = "string"

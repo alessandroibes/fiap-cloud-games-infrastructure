@@ -6,7 +6,7 @@ try {
     & "$PSScriptRoot/Initialize-Local.ps1"
     docker compose config --quiet
     if ($LASTEXITCODE -ne 0) { throw 'Compose inválido.' }
-    docker compose up -d --wait --wait-timeout 180
+    docker compose up -d --wait --wait-timeout 180 postgres rabbitmq
     if ($LASTEXITCODE -ne 0) { throw 'Dependências indisponíveis.' }
     dotnet restore FiapCloudGames.Infrastructure.sln --locked-mode
     if ($LASTEXITCODE -ne 0) { throw 'Restore falhou.' }
@@ -17,7 +17,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Testes G1 falharam.' }
     docker compose restart postgres rabbitmq
     if ($LASTEXITCODE -ne 0) { throw 'Reinício falhou.' }
-    docker compose up -d --wait --wait-timeout 180
+    docker compose up -d --wait --wait-timeout 180 postgres rabbitmq
     if ($LASTEXITCODE -ne 0) { throw 'Dependências não recuperadas.' }
     $env:G1_VERIFY_PERSISTENCE = '1'
     dotnet test FiapCloudGames.Infrastructure.sln --no-build --filter 'Phase=Persistence' --logger 'trx;LogFileName=g1-persistence.trx'

@@ -2,7 +2,7 @@
 
 **Status:** Aceito (ADR-P2-004). A FIAP exige os três eventos; os campos adicionais são decisões do projeto.
 
-Esta pasta é a especificação canônica versionada. Campos e exemplos JSON alinhados ao ADR-P2-004. O G1 testa fixtures C# em assemblies independentes, JSON e transmissão MassTransit pelo RabbitMQ; veja a [matriz de integração](integration-matrix.md). Repetir a compatibilidade com os tipos reais dos serviços em G2–G5.
+Esta pasta é a especificação canônica versionada. Campos e exemplos JSON alinhados ao ADR-P2-004. O G1 testa fixtures C# em assemblies independentes, JSON e transmissão MassTransit pelo RabbitMQ; veja a [matriz de integração](integration-matrix.md). G2–G5 acrescentaram testes com os tipos locais dos serviços; G6 integra os quatro serviços no mesmo Compose.
 
 - `user-created-v1.md`
 - `order-placed-v1.md`

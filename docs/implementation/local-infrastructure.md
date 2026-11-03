@@ -1,5 +1,7 @@
 # Infraestrutura local — G1
 
+Este documento registra a implantação inicial do G1. Para a solução atual com quatro APIs e migrations explícitas, consulte [Compose completo](compose-complete.md). O Compose agora inclui serviços de aplicação: para iniciar apenas as dependências use `docker compose up -d --wait postgres rabbitmq`. As limitações ao final descrevem exclusivamente o escopo histórico do G1.
+
 ## Preparação
 
 Pré-requisitos: SDK .NET 8.0.414 (ou patch compatível), Docker Desktop com engine Linux e Docker Compose. Executar na raiz deste repositório:
@@ -7,13 +9,13 @@ Pré-requisitos: SDK .NET 8.0.414 (ou patch compatível), Docker Desktop com eng
 ```powershell
 ./scripts/Initialize-Local.ps1
 docker compose config --quiet
-docker compose up -d --wait --wait-timeout 180
+docker compose up -d --wait --wait-timeout 180 postgres rabbitmq
 ./scripts/Validate-G1.ps1
 ```
 
 Se a política local impedir scripts, executar `powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/Validate-G1.ps1` somente para este processo. Não alterar a política global. O script valida, compila, testa e reinicia apenas postgres/rabbitmq deste Compose. Não remove volumes nem executa migrations de aplicações.
 
-Initialize-Local cria .env com seis senhas independentes de 256 bits, sem imprimi-las; se existir, preserva o arquivo. .env.example documenta chaves sem credenciais utilizáveis. Não usar `docker compose config` sem --quiet em logs compartilhados: a saída expandida contém segredos. Não versionar .env nem resultados brutos que contenham dados sensíveis.
+Initialize-Local cria .env com senhas independentes de 256 bits, sem imprimi-las; preserva valores existentes e acrescenta chaves novas necessárias ao G6. Reutiliza configuração JWT/bootstrap do Users local quando disponível. .env.example documenta chaves sem credenciais utilizáveis. Não usar `docker compose config` sem --quiet em logs compartilhados: a saída expandida contém segredos. Não versionar .env nem resultados brutos que contenham dados sensíveis.
 
 ## Endereços e credenciais
 
@@ -35,7 +37,7 @@ Volumes nomeados postgres-data e rabbitmq-data, prefixados pelo projeto fiap-clo
 
 Para parar preservando dados: `docker compose stop`. Para retomar: `docker compose up -d --wait`. Para observar estado: `docker compose ps`. O health PostgreSQL usa TCP para não aceitar o servidor temporário da inicialização. Testes verificam quatro conexões próprias, vinte conexões proibidas, senha incorreta e ausência de privilégios de cluster.
 
-Os testes criam somente marcadores técnicos no schema g1_validation de cada banco e na fila g1-validation-persistence. Após reinício, o modo G1_VERIFY_PERSISTENCE=1 verifica os marcadores sem recriar dados; consome a mensagem persistida. Não executar suítes simultâneas contra o mesmo ambiente técnico. O script completo semeia novamente para permitir repetição.
+Os testes criam somente marcadores técnicos no schema g1_validation de cada banco e na fila g1-validation-persistence. A partir do G6, todas as mensagens de testes G1 usam o vhost exclusivo fcg_g1_tests, criado via API de gerenciamento com permissões para fcg_local, evitando interferência nas filas de aplicação do vhost fcg. O vhost permanece para a verificação de persistência. Após reinício, o modo G1_VERIFY_PERSISTENCE=1 verifica os marcadores sem recriar dados; consome a mensagem persistida. Não executar suítes simultâneas contra o mesmo ambiente técnico. O script completo semeia novamente para permitir repetição.
 
 ## Dependências e limites
 
